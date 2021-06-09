@@ -4,7 +4,7 @@
       <UiButton
         v-for="button in data.buttons"
         :key="button.id"
-        class="charts--button"
+        class="home--card--button"
         :text="button.title"
         :active="button.city === data.selectedCountry"
         @click="getSelectedCity(button.city)"
@@ -23,6 +23,7 @@
     <div v-if="data.isLoading" class="home--card-loader"><UiLoader /></div>
     <!-- Normal flow -->
     <div v-else>
+      <!-- Hours -->
       <div>
         <div class="home--card-actions">
           <div class="home--card-actions-title">
@@ -60,12 +61,16 @@
           >
             <UiCard light size="small">
               <div class="home--card-result-data">
-                <img
-                  width="60"
-                  :src="`https://www.weatherbit.io/static/img/icons/${item.weather.icon}.png`"
-                  alt=""
-                />
-                <small> {{ addingHours(key) }} </small>
+                <div class="home--card-result-data-left">
+                  <img
+                    width="60"
+                    :src="`https://www.weatherbit.io/static/img/icons/${item.weather.icon}.png`"
+                    alt=""
+                  />
+                  <small>
+                    <strong>{{ addingHours(key) }}</strong>
+                  </small>
+                </div>
                 <div class="home--card-result-values">
                   <h5 title="">{{ item.temp }}°</h5>
                   <small>{{ item.weather.description }}</small>
@@ -86,12 +91,34 @@
           </div>
         </div>
       </div>
+
+      <!-- Days -->
       <div>
         <div class="home--card-actions">
+          <div class="home--card-actions-title">
+            <h2>
+              {{ forecastDaily.city_name }}, {{ forecastDaily.country_code }}
+            </h2>
+            <small
+              >Last Updated:
+              {{
+                new Date().toLocaleDateString("en-US", {
+                  weekday: "long",
+                  year: "numeric",
+                  month: "long",
+                  day: "numeric",
+                  hour12: true,
+                  hour: "numeric",
+                  minute: "numeric",
+                  seconds: "numeric",
+                })
+              }}</small
+            >
+          </div>
           <h4>
             Next
             {{ forecastDaily.data.length }}
-            {{ forecastDaily.data.length > 1 ? "days" : "day" }}
+            {{ forecastDaily.data.length > 1 ? "hours" : "hour" }}
           </h4>
         </div>
 
@@ -103,25 +130,24 @@
           >
             <UiCard light size="small">
               <div class="home--card-result-data">
-                <h4 class="home--card-result-title"></h4>
-                {{ key }}
-                <div>
+                <div class="home--card-result-data-left">
                   <img
                     width="60"
                     :src="`https://www.weatherbit.io/static/img/icons/${item.weather.icon}.png`"
                     alt=""
                   />
-                  <span>{{ item.weather.description }}</span>
-                  <small>{{}}</small>
-                </div>
-
-                <div class="home--card-result-icon">
-                  <img src="../../../assets/arrow-down.svg" alt="" />
+                  <small>
+                    <strong>{{ addingDays(key) }}</strong>
+                  </small>
                 </div>
                 <div class="home--card-result-values">
-                  <h5 title=""></h5>
-                  <p></p>
-                  <p></p>
+                  <h5>
+                    {{ item.app_max_temp }}°
+                    <span class="home--card-result-values-min">
+                      / {{ item.app_min_temp }}°
+                    </span>
+                  </h5>
+                  <small>{{ item.weather.description }}</small>
                 </div>
               </div>
             </UiCard>
@@ -170,19 +196,17 @@ export default {
     const store = useStore()
     const form = reactive({
       amount: '',
-      from: 'USD',
-      to: 'CLP',
     });
     const data = reactive({ 
       collapsed: false,
       isLoading: false,
       selectedCountry: 'Rio de Janeiro,BR',
       buttons: [{
-          title: 'Rio de Janeiro, Brazil',
+          title: 'Rio de Janeiro',
           city: 'Rio de Janeiro,BR', 
         },
         {
-          title: 'Beijing, China',
+          title: 'Beijing',
           city: 'Beijing,CN', 
         },
         {
@@ -198,22 +222,31 @@ export default {
         this.setTime(this.getTime() + (h*60*60*1000));
         return this;
       }
-
       const date = new Date().addHours(i).toLocaleTimeString("en-US", {
         hour: "numeric",
       })
-      return  date + parseFloat(i)
+      return date
+    }
+    function addingDays(i) {
+      Date.prototype.addDays = function (days) {
+        let date = new Date(this.valueOf());
+        date.setDate(date.getDate() + days);
+        return date;
+      }
+      const date = new Date().addDays(i).toLocaleDateString("en-US")
+      return date
     }
     function getForecastData(cityTarget) {
       data.isLoading = true;
       const apiUrl = 'https://api.weatherbit.io/v2.0/forecast'
       const accessKey = 'a0e178e53c6e4077834d7d4b21b6311b'
       const city = cityTarget
-      api.forecastData(`${apiUrl}/hourly?city=${city}&key=${accessKey}&hours=5`).then((response) => {
+      api.forecastData(`${apiUrl}/hourly?city=${city}&key=${accessKey}&hours=6`).then((response) => {
         store.commit('forecast_hourly', response);
-        api.forecastData(`${apiUrl}/daily?city=${city}&key=${accessKey}&days=5`).then((response) => {
+        api.forecastData(`${apiUrl}/daily?city=${city}&key=${accessKey}&days=6`).then((response) => {
           store.commit('forecast_daily', response);
           data.isLoading = false;
+          data.collapsed = false;
         })
       })
     }
@@ -223,6 +256,7 @@ export default {
       data,
       form,
       addingHours,
+      addingDays,
       getSelectedCity,
       forecastDaily: computed(() => store.state.forecastDaily),
       forecastHourly: computed(() => store.state.forecastHourly),
@@ -235,7 +269,7 @@ export default {
 .home--card {
   position: relative;
   box-sizing: border-box;
-  max-height: 290px;
+  max-height: 300px;
   max-width: 100%;
   overflow: hidden;
 }
@@ -253,6 +287,14 @@ export default {
 
 .home--card-actions-title {
   padding-bottom: 2rem;
+}
+
+.home--card-actions-title h2 {
+  font-size: var(--font-size-xl);
+}
+
+.home--card-actions-title h4 {
+  font-size: var(--font-size-base);
 }
 
 .home--card-button {
@@ -290,6 +332,12 @@ export default {
   align-items: center;
 }
 
+.home--card-result-data-left {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+}
+
 .home--card-result-values h5 {
   text-align: right;
   font-size: var(--font-size-base);
@@ -304,6 +352,11 @@ export default {
   text-align: right;
   font-size: var(--font-size-xs);
   margin: 0;
+}
+
+.home--card-result-values-min {
+  font-family: var(--font-family-nunito);
+  font-weight: 300;
 }
 
 .home--card-see-more {
@@ -344,17 +397,21 @@ export default {
 }
 
 .home--card-collapsed  {
-  max-height: 100%;
+  max-height: 100% !important;
   transition: max-height 0.25s ease-in-out;
 }
 
 .home--card-buttons {
-  padding-bottom: 2.5rem;
+  padding-bottom: 1rem;
   width: 100%;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   align-items: flex-end;
+}
+
+.home--card--button {
+  margin-bottom: .5rem;
 }
 
 .home--card-collapsed .home--card-see-more  img {
@@ -375,11 +432,25 @@ export default {
   transition: opacity .25s ease-in-out;
 }
 
+@media (min-width: 400px){
+  .home--card-buttons{
+    padding-bottom: 2.5rem;
+    width: 100%;
+    flex-direction: row;
+  }
+
+  .home--card--button {
+    margin-right: .5rem;
+  }
+}
+
 @media (min-width: 567px){
   .home--card {
+    max-height: 520px;
     box-sizing: border-box;
     margin: 0 3rem;
   }
+
 
   .home--card-result-values h5 {
     text-align: right;
@@ -398,8 +469,21 @@ export default {
   }
 
   .home--card-buttons{
+    padding-bottom: 2.5rem;
     width: 100%;
     flex-direction: row;
+  }
+
+  .home--card--button {
+    margin-right: .5rem;
+  }
+
+  .home--card-actions-title h2 {
+    font-size: var(--font-size-xxl);
+  }
+
+  .home--card-actions-title h4 {
+    font-size: var(--font-size-base);
   }
 }
 
