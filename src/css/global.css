@@ -1,0 +1,89 @@
+:root {
+  /* Colors */
+  --color-gray-0: #606064;
+  --color-gray-1: #78787e;
+  --color-gray-2: #908f97;
+  --color-gray-3: #c0bfc9;
+  --color-gray-4: #f0effb;
+
+  --color-purple-0: #0A071B;
+  --color-purple-1: #141125;
+  --color-purple-2: #120F21;
+  --color-purple-3: #120D31;
+  --color-purple-4: #201D34;
+  --color-purple-5: #1D1551;
+  --color-purple-6: #231961;
+  --color-purple-7: #292541;
+  --color-purple-8: #1E1A38;
+  
+  --color-green-0: #0a291c;
+  --color-green-1: #1e7b54;
+  --color-green-2: #32cd8b;
+  --color-green-3: #84e1ba;
+  --color-green-4: #d6f5e8;
+
+  --color-red-0: #330001;
+  --color-red-1: #980103;
+  --color-red-2: #fe0105;
+  --color-red-3: #fe6769;
+  --color-red-4: #ffcccd;
+
+  --color-orange-0: #321901;
+  --color-orange-1: #964a03;
+  --color-orange-2: #fa7c05;
+  --color-orange-3: #fcb069;
+  --color-orange-4: #fee5cd;
+
+  --color-yellow-0: #2f2e04;
+  --color-yellow-1: #8e8a0b;
+  --color-yellow-2: #ece513;
+  --color-yellow-3: #f4f071;
+  --color-yellow-4: #fee5cd;
+
+  /* Fonts size */
+  --font-size-xxxxl: 4.209rem;
+  --font-size-xxxl: 3.157rem;
+  --font-size-xxl: 2.369rem;
+  --font-size-xl: 1.777rem;
+  --font-size-lg: 1.333rem;
+  --font-size-base: 1rem;
+  --font-size-sm: 0.75rem;
+  --font-size-xs: 0.563rem;
+  --font-size-xxs: 0.563rem;
+
+  /* Font Weight */
+  --font-weight-lighter: 200;
+  --font-weight-light: 300;
+  --font-weight-regular: 400;
+  --font-weight-semibold: 500;
+  --font-weight-bold: 700;
+
+  /* Font family */
+  --font-family-nunito: 'Nunito', Arial, sans-serif;
+  --font-family-dm-sans: 'DM Sans', Helvetica, Arial, sans-serif;
+
+  /* Base */
+  --bg-color-base: var(--color-purple-0);
+  --font-color-base: var(--color-gray-4);
+
+  /* Base Color */
+  --purple: var(--color-purple-7);
+  --red: var(--color-red-2);
+  --green: var(--color-green-2);
+  --yellow: var(--color-yellow-2);
+  --gray: var(--color-gray-3);
+  --white: var(--color-gray-4);
+ 
+  /* Components */
+  --ui-card-border: var(--color-purple-4);
+  --ui-card-bg: var(--color-purple-1);
+
+  --ui-input-bg: var(--color-purple-2);
+  --ui-input-border: var(--color-purple-7);
+  --ui-input-label: var( --color-gray-4);
+  --ui-input-placeholder: var(--color-purple-7);
+  --ui-input-active: var(--color-purple-5);
+  --ui-input-filled: var( --color-gray-4);
+  --ui-input-hover: var(--color-purple-8);
+  --ui-input-font-size: var(--font-size-base);
+}

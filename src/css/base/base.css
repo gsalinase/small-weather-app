@@ -1,0 +1,21 @@
+/* Base */
+html {
+  background-color: var(--bg-color-base);
+  font-family: var(--font-family-nunito);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-regular);
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  color: var(--font-color-base);
+}
+
+html,
+body {
+  width: 100%;
+  height: 100%;
+}
