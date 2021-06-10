@@ -239,7 +239,7 @@ export default {
     function getForecastData(cityTarget) {
       data.isLoading = true;
       const apiUrl = 'https://api.weatherbit.io/v2.0/forecast'
-      const accessKey = 'a0e178e53c6e4077834d7d4b21b6311b'
+      const accessKey = '82e6fe4b35c44f23a09bb64bc8be7389'
       const city = cityTarget
       api.forecastData(`${apiUrl}/hourly?city=${city}&key=${accessKey}&hours=6`).then((response) => {
         store.commit('forecast_hourly', response);
