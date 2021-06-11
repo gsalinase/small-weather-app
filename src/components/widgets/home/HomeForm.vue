@@ -293,6 +293,7 @@ export default {
 .home--card-loader-small {
   margin: 0 auto !important;
   max-width: 300px;
+  transition: max-width .5s ease-out;
 }
 
 .home--card-loader-full {
