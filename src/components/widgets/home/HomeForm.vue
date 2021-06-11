@@ -20,150 +20,155 @@
     }"
   >
     <!-- Loader -->
-    <div v-if="data.isLoading" class="home--card-loader"><UiLoader /></div>
-    <!-- Normal flow -->
-    <div v-else>
-      <!-- Hours -->
-      <div>
-        <div class="home--card-actions">
-          <div class="home--card-actions-title">
-            <h2>
-              {{ forecastHourly.city_name }}, {{ forecastHourly.country_code }}
-            </h2>
-            <small
-              >Last Updated:
-              {{
-                new Date().toLocaleDateString("en-US", {
-                  weekday: "long",
-                  year: "numeric",
-                  month: "long",
-                  day: "numeric",
-                  hour12: true,
-                  hour: "numeric",
-                  minute: "numeric",
-                  seconds: "numeric",
-                })
-              }}</small
-            >
-          </div>
-          <h4>
-            Next
-            {{ forecastHourly.data.length }}
-            {{ forecastHourly.data.length > 1 ? "hours" : "hour" }}
-          </h4>
-        </div>
+    <transition name="fade" mode="out-in">
+      <div v-if="data.isLoading" class="home--card-loader"><UiLoader /></div>
+      <!-- Normal flow -->
+      <div v-else>
+        <!-- Hours -->
+        <transition name="fade">
+          <div v-if="!data.isLoading">
+            <div class="home--card-actions">
+              <div class="home--card-actions-title">
+                <h2>
+                  {{ forecastHourly.city_name }},
+                  {{ forecastHourly.country_code }}
+                </h2>
+                <small
+                  >Last Updated:
+                  {{
+                    new Date().toLocaleDateString("en-US", {
+                      weekday: "long",
+                      year: "numeric",
+                      month: "long",
+                      day: "numeric",
+                      hour12: true,
+                      hour: "numeric",
+                      minute: "numeric",
+                      seconds: "numeric",
+                    })
+                  }}</small
+                >
+              </div>
+              <h4>
+                Next
+                {{ forecastHourly.data.length }}
+                {{ forecastHourly.data.length > 1 ? "hours" : "hour" }}
+              </h4>
+            </div>
 
-        <div class="home--card-result home--card-opacity-1">
-          <div
-            class="home--card-result-container"
-            v-for="(item, key) in forecastHourly.data"
-            :key="item.id"
-          >
-            <UiCard light size="small">
-              <div class="home--card-result-data">
-                <div class="home--card-result-data-left">
-                  <img
-                    width="60"
-                    :src="`https://www.weatherbit.io/static/img/icons/${item.weather.icon}.png`"
-                    alt=""
-                  />
-                  <small>
-                    <strong>{{ addingHours(key) }}</strong>
-                  </small>
-                </div>
-                <div class="home--card-result-values">
-                  <h5 title="">{{ item.temp }}°</h5>
-                  <small>{{ item.weather.description }}</small>
-                  <p></p>
-                  <p></p>
+            <div class="home--card-result home--card-opacity-1">
+              <div
+                class="home--card-result-container"
+                v-for="(item, key) in forecastHourly.data"
+                :key="item.id"
+              >
+                <UiCard light size="small">
+                  <div class="home--card-result-data">
+                    <div class="home--card-result-data-left">
+                      <img
+                        width="60"
+                        :src="`https://www.weatherbit.io/static/img/icons/${item.weather.icon}.png`"
+                        alt=""
+                      />
+                      <small>
+                        <strong>{{ addingHours(key) }}</strong>
+                      </small>
+                    </div>
+                    <div class="home--card-result-values">
+                      <h5 title="">{{ item.temp }}°</h5>
+                      <small>{{ item.weather.description }}</small>
+                      <p></p>
+                      <p></p>
+                    </div>
+                  </div>
+                </UiCard>
+              </div>
+              <div
+                class="home--card-see-more"
+                @click="data.collapsed = !data.collapsed"
+              >
+                <div class="home--card-see-more-click">
+                  <img src="../../../assets/arrow.svg" alt="arrow see more" />
+                  <small> See {{ data.collapsed ? "Less" : "More" }} </small>
                 </div>
               </div>
-            </UiCard>
+            </div>
           </div>
-          <div
-            class="home--card-see-more"
-            @click="data.collapsed = !data.collapsed"
-          >
-            <div class="home--card-see-more-click">
-              <img src="../../../assets/arrow.svg" alt="arrow see more" />
-              <small> See {{ data.collapsed ? "Less" : "More" }} </small>
+        </transition>
+
+        <!-- Days -->
+        <div>
+          <div class="home--card-actions">
+            <div class="home--card-actions-title">
+              <h2>
+                {{ forecastDaily.city_name }}, {{ forecastDaily.country_code }}
+              </h2>
+              <small
+                >Last Updated:
+                {{
+                  new Date().toLocaleDateString("en-US", {
+                    weekday: "long",
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric",
+                    hour12: true,
+                    hour: "numeric",
+                    minute: "numeric",
+                    seconds: "numeric",
+                  })
+                }}</small
+              >
+            </div>
+            <h4>
+              Next
+              {{ forecastDaily.data.length }}
+              {{ forecastDaily.data.length > 1 ? "hours" : "hour" }}
+            </h4>
+          </div>
+
+          <div class="home--card-result home--card-opacity-1">
+            <div
+              class="home--card-result-container"
+              v-for="(item, key) in forecastDaily.data"
+              :key="item.id"
+            >
+              <UiCard light size="small">
+                <div class="home--card-result-data">
+                  <div class="home--card-result-data-left">
+                    <img
+                      width="60"
+                      :src="`https://www.weatherbit.io/static/img/icons/${item.weather.icon}.png`"
+                      alt=""
+                    />
+                    <small>
+                      <strong>{{ addingDays(key) }}</strong>
+                    </small>
+                  </div>
+                  <div class="home--card-result-values">
+                    <h5>
+                      {{ item.app_max_temp }}°
+                      <span class="home--card-result-values-min">
+                        / {{ item.app_min_temp }}°
+                      </span>
+                    </h5>
+                    <small>{{ item.weather.description }}</small>
+                  </div>
+                </div>
+              </UiCard>
+            </div>
+            <div
+              class="home--card-see-more"
+              @click="data.collapsed = !data.collapsed"
+            >
+              <div class="home--card-see-more-click">
+                <img src="../../../assets/arrow.svg" alt="arrow see more" />
+                <small> See {{ data.collapsed ? "Less" : "More" }} </small>
+              </div>
             </div>
           </div>
         </div>
       </div>
-
-      <!-- Days -->
-      <div>
-        <div class="home--card-actions">
-          <div class="home--card-actions-title">
-            <h2>
-              {{ forecastDaily.city_name }}, {{ forecastDaily.country_code }}
-            </h2>
-            <small
-              >Last Updated:
-              {{
-                new Date().toLocaleDateString("en-US", {
-                  weekday: "long",
-                  year: "numeric",
-                  month: "long",
-                  day: "numeric",
-                  hour12: true,
-                  hour: "numeric",
-                  minute: "numeric",
-                  seconds: "numeric",
-                })
-              }}</small
-            >
-          </div>
-          <h4>
-            Next
-            {{ forecastDaily.data.length }}
-            {{ forecastDaily.data.length > 1 ? "hours" : "hour" }}
-          </h4>
-        </div>
-
-        <div class="home--card-result home--card-opacity-1">
-          <div
-            class="home--card-result-container"
-            v-for="(item, key) in forecastDaily.data"
-            :key="item.id"
-          >
-            <UiCard light size="small">
-              <div class="home--card-result-data">
-                <div class="home--card-result-data-left">
-                  <img
-                    width="60"
-                    :src="`https://www.weatherbit.io/static/img/icons/${item.weather.icon}.png`"
-                    alt=""
-                  />
-                  <small>
-                    <strong>{{ addingDays(key) }}</strong>
-                  </small>
-                </div>
-                <div class="home--card-result-values">
-                  <h5>
-                    {{ item.app_max_temp }}°
-                    <span class="home--card-result-values-min">
-                      / {{ item.app_min_temp }}°
-                    </span>
-                  </h5>
-                  <small>{{ item.weather.description }}</small>
-                </div>
-              </div>
-            </UiCard>
-          </div>
-          <div
-            class="home--card-see-more"
-            @click="data.collapsed = !data.collapsed"
-          >
-            <div class="home--card-see-more-click">
-              <img src="../../../assets/arrow.svg" alt="arrow see more" />
-              <small> See {{ data.collapsed ? "Less" : "More" }} </small>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+    </transition>
   </UiCard>
 </template>
 
@@ -266,6 +271,16 @@ export default {
 </script>
 
 <style scoped>
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity .2s ease-in-out;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+
 .home--card {
   position: relative;
   box-sizing: border-box;
