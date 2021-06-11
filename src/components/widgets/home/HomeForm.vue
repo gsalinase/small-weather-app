@@ -5,7 +5,7 @@
         v-for="button in data.buttons"
         :key="button.id"
         class="home--card--button"
-        :text="button.title"
+        :text="button.city"
         :active="button.city === data.selectedCountry"
         @click="getSelectedCity(button.city)"
       />
@@ -220,6 +220,7 @@ export default {
       }],
     })
     function getSelectedCity(city) {
+      data.selectedCountry = city
       getForecastData(city)
     }
     function addingHours(i) {
